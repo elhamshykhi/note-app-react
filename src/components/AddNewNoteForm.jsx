@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function AddNewNoteForm({ handleAddNote }) {
+function AddNewNoteForm({ handleAddNote, handleCloseAddForm }) {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
 
@@ -14,13 +14,17 @@ function AddNewNoteForm({ handleAddNote }) {
       title,
       text,
       createdAt: new Date().toISOString(),
-      completed: false,
+      important: false,
     };
 
     handleAddNote(newNote);
 
     setTitle("");
     setText("");
+
+    if (window.innerWidth < 640) {
+      handleCloseAddForm();
+    }
   };
 
   return (
@@ -32,19 +36,19 @@ function AddNewNoteForm({ handleAddNote }) {
       >
         <input
           type="text"
-          name=""
-          id=""
+          name="note-title"
+          id="note-title"
           placeholder="Note Title"
-          className="bg-white border-2 border-indigo-300 rounded-lg py-2 px-4 placeholder:text-indigo-300 text-sm focus:outline-none text-indigo-400 font-medium"
+          className="input"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <textarea
           type="text"
-          name=""
-          id=""
+          name="note-text"
+          id="note-text"
           placeholder="Note Text"
-          className="bg-white flex-grow h-full border-2 border-indigo-300 rounded-lg py-2 px-4 placeholder:text-indigo-300 text-sm focus:outline-none text-indigo-400 font-medium"
+          className="input flex-grow"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
@@ -52,13 +56,16 @@ function AddNewNoteForm({ handleAddNote }) {
         <div className="flex items-center justify-between gap-x-2">
           <button
             type="button"
-            className="bg-white text-indigo-400 border-2 border-indigo-300 font-semibold text-center capitalize w-full py-2 rounded-lg mt-auto sm:hidden"
+            onClick={handleCloseAddForm}
+            className="button bg-white text-indigo-400 border-indigo-300 sm:hidden"
           >
             cancel
           </button>
+
           <button
-            type="submit"
-            className="bg-indigo-400 text-white border-2 border-transparent font-semibold text-center capitalize w-full py-2 rounded-lg mt-auto"
+            type="button"
+            onClick={handleSubmit}
+            className="button bg-indigo-400 text-white border-transparent"
           >
             add new note
           </button>

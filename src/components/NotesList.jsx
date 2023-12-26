@@ -1,12 +1,14 @@
 import NotesStatus from "./NotesStatus";
+import { StarIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 function NotesList({
   notes,
   handleDeleteNote,
-  handleCompleteNote,
+  handleImportantNote,
   sortBy,
   handleSort,
 }) {
+  // sort notes
   let sortedNotes = notes;
   if (sortBy === "latest") {
     sortedNotes = [...notes].sort(
@@ -18,13 +20,13 @@ function NotesList({
     );
   } else {
     sortedNotes = [...notes].sort(
-      (a, b) => Number(a.completed) - Number(b.completed)
+      (a, b) => Number(a.important) - Number(b.important)
     );
   }
+
   return (
-    <div className="h-[calc(100vh_-_112px)]">
-      {/* Notes List */}
-      <div className="flex flex-col gap-y-2 h-full overflow-y-auto bg-indigo-400 rounded-xl p-4 relative">
+    <div className="h-full">
+      <div className="flex flex-col gap-y-2 h-full overflow-y-auto bg-indigo-400 rounded-xl p-4 relative flex-grow">
         <NotesStatus notes={notes} sortBy={sortBy} handleSort={handleSort} />
 
         {notes.length ? (
@@ -33,7 +35,7 @@ function NotesList({
               key={note.id}
               note={note}
               handleDeleteNote={handleDeleteNote}
-              handleCompleteNote={handleCompleteNote}
+              handleImportantNote={handleImportantNote}
             />
           ))
         ) : (
@@ -46,47 +48,42 @@ function NotesList({
   );
 }
 
-function NoteItem({ note, handleDeleteNote, handleCompleteNote }) {
+function NoteItem({ note, handleDeleteNote, handleImportantNote }) {
+  const dateOption = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
   return (
     <div className="bg-white p-4 rounded-xl text-indigo-400">
       <div className="flex items-center justify-between border-b border-b-indigo-100 pb-2 mb-2">
-        <div className="">
+        <div>
           <p className="font-bold capitalize break-all">{note.title}</p>
           <p className="text-indigo-300 text-xs">
-            {new Date(note.createdAt).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
+            {new Date(note.createdAt).toLocaleDateString("en-US", dateOption)}
           </p>
         </div>
 
         <div className="flex items-center gap-x-1.5">
-          <button onClick={() => handleDeleteNote(note.id)} type="button">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-5 h-5 stroke-red-600"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18 18 6M6 6l12 12"
-              />
-            </svg>
+          <button type="button" className="relative w-5 h-5">
+            <input
+              type="checkbox"
+              onChange={() => handleImportantNote(note.id)}
+              name={note.id}
+              id={note.id}
+              value={note.id}
+              checked={note.important}
+              className="appearance-none w-5 h-5 cursor-pointer"
+            />
+            <StarIcon
+              className={`svg absolute left-0 top-0 stroke-amber-400 ${
+                note.important ? "fill-amber-400" : "fill-transparent"
+              }`}
+            />
           </button>
-          <input
-            type="checkbox"
-            onChange={() => handleCompleteNote(note.id)}
-            name={note.id}
-            id={note.id}
-            value={note.id}
-            checked={note.completed}
-            className="w-4 h-4"
-          />
+          <button type="button" onClick={() => handleDeleteNote(note.id)}>
+            <XMarkIcon className="svg stroke-red-600" />
+          </button>
         </div>
       </div>
 
