@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useNotesDispatch } from "../context/NotesContext";
 
-function AddNewNoteForm({ handleAddNote, handleCloseAddForm }) {
+function AddNewNoteForm({ handleCloseAddForm }) {
+  const dispatch = useNotesDispatch();
+
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleAddNewNote = (e) => {
     e.preventDefault();
 
     if (!title || !text) return;
@@ -17,7 +20,7 @@ function AddNewNoteForm({ handleAddNote, handleCloseAddForm }) {
       important: false,
     };
 
-    handleAddNote(newNote);
+    dispatch({ type: "addNote", payload: newNote });
 
     setTitle("");
     setText("");
@@ -32,7 +35,7 @@ function AddNewNoteForm({ handleAddNote, handleCloseAddForm }) {
       <form
         action=""
         className="flex flex-col gap-y-2.5 h-full"
-        onSubmit={handleSubmit}
+        onSubmit={handleAddNewNote}
       >
         <input
           type="text"
@@ -64,7 +67,7 @@ function AddNewNoteForm({ handleAddNote, handleCloseAddForm }) {
 
           <button
             type="button"
-            onClick={handleSubmit}
+            onClick={handleAddNewNote}
             className="button bg-indigo-400 text-white border-transparent"
           >
             add new note

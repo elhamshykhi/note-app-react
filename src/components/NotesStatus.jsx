@@ -1,4 +1,8 @@
-function NotesStatus({ notes, sortBy, handleSort }) {
+import { useNotes } from "../context/NotesContext";
+
+function NotesStatus({ sortBy, handleSort }) {
+  const notes = useNotes();
+
   if (!notes.length) return;
 
   const allNotes = notes.length;

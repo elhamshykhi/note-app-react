@@ -1,43 +1,9 @@
-# Note App
+import { useContext, useReducer } from "react";
+import { createContext } from "react";
 
-## Table of contents
+const NotesContext = createContext();
+const NotesDispatchContext = createContext();
 
-- [Overview](#overview)
-- [How to run project](#how-to-run-project)
-- [Screenshot](#screenshot)
-- [Built with](#built-with)
-- [What I learned](#what-i-learned)
-
-### Overview
-
-This is a mini project to learn basic concepts of react.
-Add new note, delete a note and add a note to important notes.
-
-### How to run project
-
-- npm install
-- npm run dev
-
-### Screenshot
-
-![](./src/assets/pagePreview.png)
-
-### Built with
-
-- [React](https://reactjs.org/) - JS library
-- [tailwind](https://tailwindcss.com/) - For styles
-- [heroicons](https://heroicons.com/) - For svg
-
-### What I learned
-
-- How to make components
-- How to use props, handle events and forms
-- State management and How to use useState() and lifting state up
-- How to use useReducer()
-- How to sort data and render list in react
-- How to make a context for notes
-
-```js
 function notesReducer(notes, { type, payload }) {
   switch (type) {
     case "addNote":
@@ -71,4 +37,3 @@ export function useNotes() {
 export function useNotesDispatch() {
   return useContext(NotesDispatchContext);
 }
-```
